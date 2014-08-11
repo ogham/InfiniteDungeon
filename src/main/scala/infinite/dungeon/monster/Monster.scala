@@ -28,7 +28,13 @@ trait Monster {
   val ID = Monster.nextID
   def name(): String
 
+  def initialHP(): Int
+  var HP = initialHP()
+
   def describe(uppercase: Boolean): String
+
+  def killMessage(): String
+  def hitMessage(): String
 
   override def equals(other: Any): Boolean = {
     other match {

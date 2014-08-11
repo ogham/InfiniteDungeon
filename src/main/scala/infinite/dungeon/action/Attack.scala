@@ -7,7 +7,15 @@ class Attack(enemy: Monster) extends Action {
   override def describe(): String = "Attack the " + enemy.name()
 
   override def perform(game: Game) {
-    game.println("You attack the " + enemy.name() + "!")
-    game.level.killMonster(enemy)
+    val attackStrength = 12
+
+    if (enemy.HP <= attackStrength) {
+      game.println(enemy.killMessage())
+      game.level.killMonster(enemy)
+    }
+    else {
+      game.println(enemy.hitMessage())
+      enemy.HP -= attackStrength
+    }
   }
 }
