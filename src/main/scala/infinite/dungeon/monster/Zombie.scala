@@ -1,5 +1,7 @@
 package infinite.dungeon.monster
 
+import infinite.dungeon.Game
+
 class Zombie extends Monster {
   override def name(): String = "zombie"
 
@@ -12,4 +14,10 @@ class Zombie extends Monster {
   override def killMessage(): String = "You hit the zombie! It looks dazed, and then falls over."
 
   override def hitMessage(): String = "You hit the zombie!"
+
+  override def withPlayerNearby(game: Game): Boolean = {
+    game.println("The zombie punches you in the face!")
+    game.maimPlayer(13)
+    true
+  }
 }

@@ -10,5 +10,8 @@ class Move(in: Direction, to: Room) extends Action {
   override def perform(game: Game): Unit = {
     game.println(s"You move $in.")
     game.currentRoom = to
+
+    game.println(game.level.describeRoom(to))
+    game.println("")
   }
 }

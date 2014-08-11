@@ -1,5 +1,7 @@
 package infinite.dungeon.monster
 
+import infinite.dungeon.Game
+
 import scala.util.Random
 
 object Monster {
@@ -35,6 +37,8 @@ trait Monster {
 
   def killMessage(): String
   def hitMessage(): String
+
+  def withPlayerNearby(game: Game): Boolean
 
   override def equals(other: Any): Boolean = {
     other match {
