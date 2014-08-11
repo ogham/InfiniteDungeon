@@ -40,6 +40,7 @@ class Game(in: BufferedReader, out: PrintStream) {
       val choice = readChoice()
       if (choice >= 0) {
         actions(choice).perform(this)
+        out.println("")
       }
     }
   }
