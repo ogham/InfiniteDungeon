@@ -31,6 +31,7 @@ trait Room {
   val ID = Room.nextID
   def name(): String
 
+  /** List of actions that the player can pick from just by being in the room. */
   def passiveActions(): Seq[Action] = {
     List()
   }

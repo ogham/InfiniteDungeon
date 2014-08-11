@@ -9,35 +9,38 @@ import scala.collection.mutable
 import scala.util.Random
 
 /**
- * Main program entry point.
+ * A game holds the main game loop, as well as any variables that get modified
+ * during the course of play.
+ *
+ * Because Infinite Dungeon can be run either locally or over a network, it
+ * gets initialised with both input and output streams, which should definitely
+ * be used instead of readLine() and println(), because they will get set to be
+ * sent over a network socket in the case of a network game.
+ *
+ * @param in  buffered reader to read the player's input lines
+ * @param out stream for any output lines
  */
 class Game(in: BufferedReader, out: PrintStream) {
-  def healPlayer(amount: Int) {
-    playerHP += amount
-
-    if (playerHP > maxHP) {
-      playerHP = maxHP
-    }
-  }
-
-  def maimPlayer(damage: Int) {
-    if (playerHP <= damage) {
-      println("You have died...")  // Do you want your possessions identified?
-      playing = false
-    }
-    else {
-      playerHP -= damage
-    }
-  }
-
+  /** The room we're currently in. */
   var currentRoom: Room = new Dungeon()
-  var maxHP = 100
-  var playerHP = maxHP
-  var random = new Random()
-  val level = Level.build(currentRoom, random)
-  var playing = true
 
-  def readChoice(choices: mutable.Map[Char, Action]): Option[Action] = {
+  /** The maximum the player's HP is allowed to go. */
+  private var maxHP = 100
+
+  /** The player's current HP. */
+  var playerHP = maxHP
+
+  /** Randomness generator that gets used all over the place. */
+  var random = new Random()
+
+  /** The level on which we are playing. */
+  private val level = Level.build(currentRoom, random)
+
+  /** Whether we are, in fact, playing at all! */
+  private var playing = true
+
+  /** Read one of the player's choices from the game's input. */
+  private def readChoice(choices: mutable.Map[Char, Action]): Option[Action] = {
     while (true) {
       out.print("\n> ")
       var input = in.readLine()
@@ -53,6 +56,7 @@ class Game(in: BufferedReader, out: PrintStream) {
     None
   }
 
+  /** Start the main game loop, only leaving it when the game is over! */
   def play() {
     out.println(level.describeRoom(currentRoom))
     out.println("")
@@ -85,12 +89,34 @@ class Game(in: BufferedReader, out: PrintStream) {
     }
   }
 
+  /** Prints a string to the game's output */
   def println(s: String) {
     out.println(s)
+  }
+
+  /** Heals the player up to their max HP by the given amount. */
+  def healPlayer(amount: Int) {
+    playerHP += amount
+
+    if (playerHP > maxHP) {
+      playerHP = maxHP
+    }
+  }
+
+  /** Damages the player, possibly killing them, by the given amount. */
+  def maimPlayer(damage: Int) {
+    if (playerHP <= damage) {
+      println("You have died...")  // Do you want your possessions identified?
+      playing = false
+    }
+    else {
+      playerHP -= damage
+    }
   }
 }
 
 object Game {
+  /** Start a new local game without a server */
   def main(args: Array[String]) {
     new Game(new BufferedReader(new InputStreamReader(System.in)), System.out).play()
   }
