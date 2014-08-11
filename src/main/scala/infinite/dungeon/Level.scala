@@ -1,8 +1,8 @@
 package infinite.dungeon
 
-import infinite.dungeon.action.{Move, Attack, Action}
+import infinite.dungeon.action.{Action, Attack, Move}
 import infinite.dungeon.monster.Monster
-import infinite.dungeon.room.{Dungeon, Room}
+import infinite.dungeon.room.Room
 
 import scala.collection.mutable
 import scala.util.Random
@@ -29,22 +29,26 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
   }
 
   /** Prints out a list of all rooms, and the creatures that lie within. */
-  def describe() {
+  def describeAll() {
     rooms.foreach(room => { describeRoom(room._2); println(""); })
   }
 
   /** Prints out the type of the given room, and the monsters in it. */
   def describeRoom(room: Room) {
     println("Room #" + room.ID + " is a " + room.name() + ".")
-    actionsForRoom(room).foreach(m => println(m.describe()))
   }
 
   /** Get all the actions for the given room. */
-  def actionsForRoom(room: Room): Iterable[Action] = {
+  def actionsForRoom(room: Room): Seq[Action] = {
     var actions: Seq[Action] = List()
     actions ++= directions.actionsForRoom(room)
     actions ++= monstersIn(room).map(new Attack(_))
     actions
+  }
+
+  /** Remove a monster from the level. */
+  def killMonster(monster: Monster) {
+    monsters.remove(monster)
   }
 }
 
@@ -57,14 +61,16 @@ object Level {
    * @param random the random source
    * @return a new Level object
    */
-  def build(random: Random): Level = {
-    val rooms = new LevelBuilder(random).addRoom((10, 10), new Dungeon).addRooms(12).build()
+  def build(startRoom: Room, random: Random): Level = {
+    val rooms = new LevelBuilder(random).addRoom((10, 10), startRoom).addRooms(12).build()
     var map = mutable.Map[Monster, Room]()
 
     rooms.foreach(room => {
-      for (i <- 1 to random.nextInt(4)) {
-        val monster = Monster.randomMonster(random)
-        map += monster -> room._2
+      if (random.nextBoolean()) {
+        for (i <- 1 to random.nextInt(3)) {
+          val monster = Monster.randomMonster(random)
+          map += monster -> room._2
+        }
       }
     })
 
