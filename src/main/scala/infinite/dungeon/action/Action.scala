@@ -1,9 +1,8 @@
 package infinite.dungeon.action
 
-import infinite.dungeon.Main
+import infinite.dungeon.Game
 
 trait Action {
-  def perform(main: Main.type)
-
+  def perform(main: Game)
   def describe(): String
 }

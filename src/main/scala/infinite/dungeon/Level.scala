@@ -34,8 +34,10 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
   }
 
   /** Prints out the type of the given room, and the monsters in it. */
-  def describeRoom(room: Room) {
-    println("Room #" + room.ID + " is a " + room.name() + ".")
+  def describeRoom(room: Room): String = {
+    var s = new mutable.StringBuilder(s"Room #${room.ID} is a ${room.name()}.")
+    monstersIn(room).foreach(m => s.append(s" There is a ${m.name()} shuffling towards you."))
+    s.toString()
   }
 
   /** Get all the actions for the given room. */
