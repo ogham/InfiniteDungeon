@@ -28,6 +28,8 @@ trait Monster {
   val ID = Monster.nextID
   def name(): String
 
+  def describe(uppercase: Boolean): String
+
   override def equals(other: Any): Boolean = {
     other match {
       case that: Monster => that.isInstanceOf[Monster] && that.ID == this.ID
