@@ -9,6 +9,9 @@ package object dungeon {
 
   object Direction extends Enumeration {
     type Direction = Value
-    val North, South, East, West = Value
+    val North = Value("north")
+    val South = Value("south")
+    val West = Value("west")
+    val East = Value("east")
   }
 }
