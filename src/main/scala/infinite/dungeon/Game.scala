@@ -1,6 +1,6 @@
 package infinite.dungeon
 
-import java.io.{BufferedReader, PrintStream}
+import java.io.{BufferedReader, InputStreamReader, PrintStream}
 
 import infinite.dungeon.action.Action
 import infinite.dungeon.room.{Dungeon, Room}
@@ -49,3 +49,9 @@ class Game(in: BufferedReader, out: PrintStream) {
   }
 }
 
+
+object Game {
+  def main(args: Array[String]) {
+    new Game(new BufferedReader(new InputStreamReader(System.in)), System.out).play()
+  }
+}
