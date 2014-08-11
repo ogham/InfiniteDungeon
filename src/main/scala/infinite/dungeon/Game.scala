@@ -13,7 +13,8 @@ import scala.util.Random
  */
 class Game(in: BufferedReader, out: PrintStream) {
   var currentRoom: Room = new Dungeon()
-  val level = Level.build(currentRoom, new Random())
+  var random = new Random()
+  val level = Level.build(currentRoom, random)
   var playing = true
 
   def readChoice(choices: mutable.Map[Char, Action]): Option[Action] = {

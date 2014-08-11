@@ -1,5 +1,7 @@
 package infinite.dungeon.room
 
+import infinite.dungeon.action.Action
+
 import scala.util.Random
 
 object Room {
@@ -13,6 +15,9 @@ object Room {
     if (random.nextBoolean()) {
       new Dungeon()
     }
+    else if (random.nextBoolean()) {
+      new FountainRoom
+    }
     else {
       new RockyRoom()
     }
@@ -25,6 +30,10 @@ object Room {
 trait Room {
   val ID = Room.nextID
   def name(): String
+
+  def passiveActions(): Seq[Action] = {
+    List()
+  }
 
   override def equals(other: Any): Boolean = {
     other match {
