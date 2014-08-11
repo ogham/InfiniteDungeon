@@ -12,14 +12,24 @@ object Room {
   }
 
   def randomRoom(random: Random): Room = {
-    if (random.nextBoolean()) {
-      new Dungeon()
+    val n = random.nextInt(10)
+    if (n == 0 || n == 1 || n == 2) {
+      new DilapidatedRoom(random.nextInt(3))
     }
-    else if (random.nextBoolean()) {
-      new FountainRoom
+    else if (n == 3 || n == 4 || n == 5) {
+      new OrdinaryRoom(random.nextInt(3))
     }
-    else {
-      new RockyRoom()
+    else if (n == 6) {
+      new FountainRoom(random.nextInt(3))
+    }
+    else if (n == 7) {
+      new Larder()
+    }
+    else if (n == 8) {
+      new CratesRoom()
+    }
+    else { // if (n == 9)
+      new Tannery()
     }
   }
 }
@@ -30,6 +40,8 @@ object Room {
 trait Room {
   val ID = Room.nextID
   def name(): String
+
+  def describe(): String
 
   /** List of actions that the player can pick from just by being in the room. */
   def passiveActions(): Seq[Action] = {

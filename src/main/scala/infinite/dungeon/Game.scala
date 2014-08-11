@@ -3,7 +3,7 @@ package infinite.dungeon
 import java.io.{BufferedReader, InputStreamReader, PrintStream}
 
 import infinite.dungeon.action.Action
-import infinite.dungeon.room.{Dungeon, Room}
+import infinite.dungeon.room.{OrdinaryRoom, Room}
 
 import scala.collection.mutable
 import scala.util.Random
@@ -22,7 +22,7 @@ import scala.util.Random
  */
 class Game(in: BufferedReader, out: PrintStream) {
   /** The room we're currently in. */
-  var currentRoom: Room = new Dungeon()
+  var currentRoom: Room = new OrdinaryRoom(0)
 
   /** The maximum the player's HP is allowed to go. */
   private var maxHP = 100
@@ -58,8 +58,7 @@ class Game(in: BufferedReader, out: PrintStream) {
 
   /** Start the main game loop, only leaving it when the game is over! */
   def play() {
-    out.println(level.describeRoom(currentRoom))
-    out.println("")
+    describeCurrentRoom
 
     while (playing) {
       val actions: mutable.Map[Char, Action] = level.actionsForRoom(currentRoom)
@@ -87,6 +86,11 @@ class Game(in: BufferedReader, out: PrintStream) {
         println("")
       }
     }
+  }
+
+  def describeCurrentRoom() {
+    out.println(level.describeRoom(currentRoom))
+    out.println("")
   }
 
   /** Prints a string to the game's output */

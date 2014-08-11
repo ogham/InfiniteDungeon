@@ -35,3 +35,8 @@ Right now, this prints out something like this:
     1) Attack the zombie
 
 And so on and so forth.
+
+# Authors
+
+- Code: Benjamin Sago (ogham)
+- Prose: Jason Caits-Cheverst (caitscheverst)
