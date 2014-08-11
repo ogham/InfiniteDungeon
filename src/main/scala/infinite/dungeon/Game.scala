@@ -34,7 +34,7 @@ class Game(in: BufferedReader, out: PrintStream) {
   var random = new Random()
 
   /** The level on which we are playing. */
-  private val level = Level.build(currentRoom, random)
+  val level = Level.build(currentRoom, random)
 
   /** Whether we are, in fact, playing at all! */
   private var playing = true
