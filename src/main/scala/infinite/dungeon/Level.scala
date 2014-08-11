@@ -41,11 +41,20 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
   }
 
   /** Get all the actions for the given room. */
-  def actionsForRoom(room: Room): Seq[Action] = {
-    var actions: Seq[Action] = List()
+  def actionsForRoom(room: Room): mutable.Map[Char, Action] = {
+    var actions: mutable.Map[Char, Action] = mutable.Map()
     actions ++= directions.actionsForRoom(room)
-    actions ++= monstersIn(room).map(new Attack(_))
+    monstersIn(room).zipWithIndex.foreach(m => actions += numToChar(m._2 + 1) -> new Attack(m._1))
     actions
+  }
+
+  private def numToChar(num: Int): Char = {
+    if (num >= 1 && num <= 9) {
+      num.toString.charAt(0)
+    }
+    else {
+      throw new IllegalArgumentException("Number out of range")
+    }
   }
 
   /** Remove a monster from the level. */
@@ -99,23 +108,23 @@ class Directions(ups: mutable.Map[Room, Room],
                   rights: mutable.Map[Room, Room]) {
 
   /** Produce a list of movement actions for the given room. */
-  def actionsForRoom(room: Room): Seq[Action] = {
-    var actions: Seq[Action] = List()
+  def actionsForRoom(room: Room): mutable.Map[Char, Action] = {
+    var actions: mutable.Map[Char, Action] = mutable.Map()
 
     if (ups.contains(room)) {
-      actions = actions :+ new Move(Direction.North, ups(room))
+      actions += 'N' -> new Move(Direction.North, ups(room))
     }
 
     if (downs.contains(room)) {
-      actions = actions :+ new Move(Direction.South, downs(room))
+      actions += 'S' -> new Move(Direction.South, downs(room))
     }
 
     if (lefts.contains(room)) {
-      actions = actions :+ new Move(Direction.West, lefts(room))
+      actions += 'W' -> new Move(Direction.West, lefts(room))
     }
 
     if (rights.contains(room)) {
-      actions = actions :+ new Move(Direction.East, rights(room))
+      actions += 'E' -> new Move(Direction.East, rights(room))
     }
 
     actions

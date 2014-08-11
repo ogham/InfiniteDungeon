@@ -5,6 +5,7 @@ import java.io.{BufferedReader, InputStreamReader, PrintStream}
 import infinite.dungeon.action.Action
 import infinite.dungeon.room.{Dungeon, Room}
 
+import scala.collection.mutable
 import scala.util.Random
 
 /**
@@ -15,33 +16,32 @@ class Game(in: BufferedReader, out: PrintStream) {
   val level = Level.build(currentRoom, new Random())
   var playing = true
 
-  def readChoice(): Int = {
+  def readChoice(choices: mutable.Map[Char, Action]): Option[Action] = {
     while (true) {
       out.print("\n> ")
       var input = in.readLine()
       if (input == null || input == "quit") {
         playing = false
-        return -1
+        return None
       }
-      if (input.forall(_.isDigit)) {
-        return input.toInt
+      else if (input.size == 1 && choices.contains(input.charAt(0))) {
+        return Some(choices(input.charAt(0)))
       }
     }
-    -1
+
+    None
   }
 
   def play() {
     while (playing) {
       out.println(level.describeRoom(currentRoom))
       out.println("")
-      val actions: Seq[Action] = level.actionsForRoom(currentRoom)
-      actions.zipWithIndex.foreach(m => out.println(m._2 + ") " + m._1.describe()))
+      val actions: mutable.Map[Char, Action] = level.actionsForRoom(currentRoom)
+      val order = "NSWE0123456789"
+      val sortedActions: Seq[(Char, Action)] = actions.toSeq.sortBy(a => order.indexOf(a._1))
+      sortedActions.foreach(m => out.println(m._1 + ") " + m._2.describe()))
 
-      val choice = readChoice()
-      if (choice >= 0) {
-        actions(choice).perform(this)
-        out.println("")
-      }
+      readChoice(actions).map(_.perform(this))
     }
   }
 
