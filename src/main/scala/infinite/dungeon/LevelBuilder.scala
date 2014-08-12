@@ -93,11 +93,11 @@ class LevelBuilder(random: Random) {
    * Print out a grid view of the level so far, showing both possibilities and
    * created rooms.
    */
-  def debug() {
-    val miny: Int = rooms.minBy(_._1._2)._1._2 min possibilities.minBy(_._2)._2  // there's got to be a better way to write this
-    val maxy: Int = rooms.maxBy(_._1._2)._1._2 max possibilities.maxBy(_._2)._2
-    val minx: Int = rooms.minBy(_._1._1)._1._1 min possibilities.minBy(_._1)._1
-    val maxx: Int = rooms.maxBy(_._1._1)._1._1 max possibilities.maxBy(_._1)._1
+  def debug(): LevelBuilder = {
+    val miny: Int = (rooms.map(_._1._2) ++ possibilities.map(_._2)).min
+    val maxy: Int = (rooms.map(_._1._2) ++ possibilities.map(_._2)).max
+    val minx: Int = (rooms.map(_._1._1) ++ possibilities.map(_._1)).min
+    val maxx: Int = (rooms.map(_._1._1) ++ possibilities.map(_._1)).max
 
     for (j <- miny to maxy) {
       for (i <- minx to maxx) {
@@ -111,7 +111,10 @@ class LevelBuilder(random: Random) {
           print(" ")
         }
       }
+
       println("")
     }
+
+    this
   }
 }
