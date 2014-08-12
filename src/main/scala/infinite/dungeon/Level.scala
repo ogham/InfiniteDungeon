@@ -1,10 +1,10 @@
 package infinite.dungeon
 
-import infinite.dungeon.action.{Action, Attack, Move}
+import infinite.dungeon.action.{Action, Attack}
 import infinite.dungeon.monster.Monster
 import infinite.dungeon.room.Room
 
-import scala.collection.mutable
+import scala.collection.{GenTraversableOnce, mutable}
 import scala.util.Random
 
 /**
@@ -76,16 +76,25 @@ object Level {
    * @param random the random source
    * @return a new Level object
    */
-  def build(startRoom: Room, random: Random): Level = {
-    val rooms = new LevelBuilder(random).addRoom((10, 10), startRoom).addRooms(12).build()
-    var map = mutable.Map[Monster, Room]()
-
-    rooms.foreach(room => {
-      if (random.nextInt(2) == 1) {
-        map += Monster.randomMonster(random) -> room._2
-      }
-    })
-
+  def build(startRoom: Room, random: Random, numRooms: Int = 12): Level = {
+    val rooms = new LevelBuilder(random).addRoom((10, 10), startRoom).addRooms(numRooms).build()
+    var map = rooms.flatMap(room => monstersForRoom(random, room._2))
     new Level(rooms, Directions.buildFromRoomsMap(rooms), map)
+  }
+
+  /**
+   * Generate a list of monsters for this room from a random source.
+   *
+   * @param random the random source
+   * @param room   room to fill with monsters
+   * @return list of monster -> room pairings
+   */
+  private def monstersForRoom(random: Random, room: Room): GenTraversableOnce[(Monster, Room)] = {
+    if (random.nextInt(2) == 1) {
+      List(Monster.randomMonster(random) -> room)
+    }
+    else {
+      List()
+    }
   }
 }
