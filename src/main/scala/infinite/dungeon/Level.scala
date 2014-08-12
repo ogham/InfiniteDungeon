@@ -36,7 +36,7 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
   /** Prints out the type of the given room, and the monsters in it. */
   def describeRoom(room: Room): String = {
     var s = new mutable.StringBuilder(room.describe())
-    monstersIn(room).foreach(m => s.append(" " + m.describe(uppercase = false)))
+    monstersIn(room).foreach(m => s.append("\n" + m.describe(uppercase = false)))
     s.toString()
   }
 
@@ -81,11 +81,8 @@ object Level {
     var map = mutable.Map[Monster, Room]()
 
     rooms.foreach(room => {
-      if (random.nextBoolean()) {
-        for (i <- 1 to random.nextInt(3)) {
-          val monster = Monster.randomMonster(random)
-          map += monster -> room._2
-        }
+      if (random.nextInt(2) == 1) {
+        map += Monster.randomMonster(random) -> room._2
       }
     })
 

@@ -15,10 +15,10 @@ object Monster {
   def randomMonster(random: Random): Monster = {
     // There are only two right now...
     if (random.nextBoolean()) {
-      new Skeleton()
+      new Skeleton(random.nextInt(3))
     }
     else {
-      new Zombie()
+      new Zombie(random.nextInt(3))
     }
   }
 }

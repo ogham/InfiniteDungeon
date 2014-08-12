@@ -2,11 +2,15 @@ package infinite.dungeon.monster
 
 import infinite.dungeon.Game
 
-class Zombie extends Monster {
+class Zombie(variant: Int) extends Monster {
   override def name(): String = "zombie"
 
   override def describe(uppercase: Boolean): String = {
-    "A zombie walks towards you with its arms raised."
+    variant match {
+      case 0 => "A corpse lumbers towards you. Fortunately, it's been dead for long enough the flesh is dry and papery. There's no stench and no wriggling. You start to chuckle at the absurdity of considering this to be a good situation - then it goes for your face."
+      case 1 => "A corpse, non-human, shambles in your general direction, skewing a little to the left as it does. It seems like it should be harmless, but you know the unnatural strength it possesses."
+      case 2 => "A corpse drags itself toward you across the floor. Its legs are almost gone, clearly having fallen victim to the local rat population. You'd feel sorry for it, but you know it's still going to make a spirited (ha) attempt at killing you."
+    }
   }
 
   override def initialHP(): Int = 20  // Zombies are a bit tougher
