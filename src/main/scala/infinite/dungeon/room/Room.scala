@@ -12,24 +12,13 @@ object Room {
   }
 
   def randomRoom(random: Random): Room = {
-    val n = random.nextInt(10)
-    if (n == 0 || n == 1 || n == 2) {
-      new DilapidatedRoom(random.nextInt(3))
-    }
-    else if (n == 3 || n == 4 || n == 5) {
-      new OrdinaryRoom(random.nextInt(3))
-    }
-    else if (n == 6) {
-      new FountainRoom(random.nextInt(3))
-    }
-    else if (n == 7) {
-      new Larder()
-    }
-    else if (n == 8) {
-      new CratesRoom()
-    }
-    else { // if (n == 9)
-      new Tannery()
+    random.nextInt(10) match {
+      case 0 | 1 | 2 => new DilapidatedRoom(random.nextInt(3))
+      case 3 | 4 | 5 => new OrdinaryRoom(random.nextInt(4))
+      case 6 => new FountainRoom(random.nextInt(3))
+      case 7 => new Larder()
+      case 8 => new CratesRoom()
+      case 9 => new Tannery()
     }
   }
 }

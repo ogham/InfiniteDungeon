@@ -18,7 +18,7 @@ class FountainRoom(variant: Int) extends Room {
       "This well-lit room has a white stone needle suspended from its ceiling. Pure, sparkling water trickles from the tip and cascades into a small circular hole in the floor. The hole is lined with shaped bricks and chalk symbols."
     }
     else {
-      "This well-lit room has a lion's head on the wall, disgorging pure, clean waher into a stone bowl, which drains away to somewhere unknown."
+      "This well-lit room has a lion's head on the wall, disgorging pure, clean water into a stone bowl, which drains away to somewhere unknown."
     }
   }
 }
