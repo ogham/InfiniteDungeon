@@ -28,6 +28,7 @@ object Room {
  */
 trait Room {
   val ID = Room.nextID
+  var seenByPlayer = false
   def name(): String
 
   def describe(): String

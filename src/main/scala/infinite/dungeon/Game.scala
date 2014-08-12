@@ -58,7 +58,8 @@ class Game(in: BufferedReader, out: PrintStream) {
 
   /** Start the main game loop, only leaving it when the game is over! */
   def play() {
-    describeCurrentRoom
+    describeCurrentRoom()
+    currentRoom.seenByPlayer = true
 
     while (playing) {
       val actions: mutable.Map[Char, Action] = level.actionsForRoom(currentRoom)
