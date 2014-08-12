@@ -5,7 +5,7 @@ import java.io.{BufferedReader, InputStreamReader, PrintStream}
 import infinite.dungeon.action.Action
 import infinite.dungeon.room.{OrdinaryRoom, Room}
 
-import scala.collection.mutable
+import scala.collection.immutable
 import scala.util.Random
 
 /**
@@ -40,7 +40,7 @@ class Game(in: BufferedReader, out: PrintStream) {
   private var playing = true
 
   /** Read one of the player's choices from the game's input. */
-  private def readChoice(choices: mutable.Map[Char, Action]): Option[Action] = {
+  private def readChoice(choices: immutable.Map[Char, Action]): Option[Action] = {
     while (true) {
       out.print("\n> ")
       var input = in.readLine()
@@ -62,7 +62,7 @@ class Game(in: BufferedReader, out: PrintStream) {
     currentRoom.seenByPlayer = true
 
     while (playing) {
-      val actions: mutable.Map[Char, Action] = level.actionsForRoom(currentRoom)
+      val actions = level.actionsForRoom(currentRoom)
       val order = "NSWE0123456789"
       val sortedActions: Seq[(Char, Action)] = actions.toSeq.sortBy(a => order.indexOf(a._1))
       sortedActions.foreach(m => out.println(m._1 + ") " + m._2.describe()))

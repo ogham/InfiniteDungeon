@@ -4,7 +4,7 @@ import infinite.dungeon.action.{Action, Attack}
 import infinite.dungeon.monster.Monster
 import infinite.dungeon.room.Room
 
-import scala.collection.{GenTraversableOnce, mutable}
+import scala.collection.{immutable, GenTraversableOnce, mutable}
 import scala.util.Random
 
 /**
@@ -41,15 +41,15 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
   }
 
   /** Get all the actions for the given room. */
-  def actionsForRoom(room: Room): mutable.Map[Char, Action] = {
-    var actions: mutable.Map[Char, Action] = mutable.Map()
+  def actionsForRoom(room: Room): immutable.Map[Char, Action] = {
+    var actions = immutable.Map.newBuilder[Char, Action]
     actions ++= directions.actionsForRoom(room)
 
     var extraActions: Seq[Action] = List()
     extraActions ++= room.passiveActions()
     extraActions ++= monstersIn(room).map(new Attack(_))
     extraActions.zipWithIndex.foreach(m => actions += numToChar(m._2 + 1) -> m._1)
-    actions
+    actions.result()
   }
 
   private def numToChar(num: Int): Char = {
