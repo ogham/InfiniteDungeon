@@ -3,7 +3,7 @@ package infinite.dungeon
 import infinite.dungeon.action.{Action, Move}
 import infinite.dungeon.room.Room
 
-import scala.collection.mutable
+import scala.collection.{mutable, immutable}
 
 /**
  * Instead of relying on the 2D grid that the LevelBuilder generates, a level
@@ -18,14 +18,14 @@ import scala.collection.mutable
  * @param lefts  rooms where the player can move west
  * @param rights rooms where the player can move east
  */
-class Directions(ups: mutable.Map[Room, Room],
-                 downs: mutable.Map[Room, Room],
-                 lefts: mutable.Map[Room, Room],
-                 rights: mutable.Map[Room, Room]) {
+class Directions(ups: immutable.Map[Room, Room],
+                 downs: immutable.Map[Room, Room],
+                 lefts: immutable.Map[Room, Room],
+                 rights: immutable.Map[Room, Room]) {
 
   /** Produce a list of movement actions for the given room. */
-  def actionsForRoom(room: Room): mutable.Map[Char, Action] = {
-    var actions: mutable.Map[Char, Action] = mutable.Map()
+  def actionsForRoom(room: Room): immutable.Map[Char, Action] = {
+    var actions = immutable.Map.newBuilder[Char, Action]
 
     if (ups.contains(room)) {
       actions += 'N' -> new Move(Direction.North, ups(room))
@@ -43,7 +43,7 @@ class Directions(ups: mutable.Map[Room, Room],
       actions += 'E' -> new Move(Direction.East, rights(room))
     }
 
-    actions
+    actions.result()
   }
 
 }
@@ -52,29 +52,29 @@ object Directions {
 
   /** Given a map of positions to rooms, turn it into a Directions object. */
   def buildFromRoomsMap(rooms: mutable.Map[(Int, Int), Room]): Directions = {
-    var ups: mutable.Map[Room, Room] = mutable.Map()
-    var downs: mutable.Map[Room, Room] = mutable.Map()
-    var lefts: mutable.Map[Room, Room] = mutable.Map()
-    var rights: mutable.Map[Room, Room] = mutable.Map()
+    val ups = immutable.Map.newBuilder[Room, Room]
+    val downs = immutable.Map.newBuilder[Room, Room]
+    val lefts = immutable.Map.newBuilder[Room, Room]
+    val rights = immutable.Map.newBuilder[Room, Room]
 
     rooms.foreach(room => {
       if (rooms.contains((room._1._1 - 1, room._1._2))) {
-        ups.put(room._2, rooms((room._1._1 - 1, room._1._2)))
+        ups += room._2 -> rooms((room._1._1 - 1, room._1._2))
       }
 
       if (rooms.contains((room._1._1 + 1, room._1._2))) {
-        downs.put(room._2, rooms((room._1._1 + 1, room._1._2)))
+        downs += room._2 -> rooms((room._1._1 + 1, room._1._2))
       }
 
       if (rooms.contains((room._1._1, room._1._2 - 1))) {
-        lefts.put(room._2, rooms((room._1._1, room._1._2 - 1)))
+        lefts += room._2 -> rooms((room._1._1, room._1._2 - 1))
       }
 
       if (rooms.contains((room._1._1, room._1._2 + 1))) {
-        rights.put(room._2, rooms((room._1._1, room._1._2 + 1)))
+        rights += room._2 -> rooms((room._1._1, room._1._2 + 1))
       }
     })
 
-    new Directions(ups, downs, lefts, rights)
+    new Directions(ups.result(), downs.result(), lefts.result(), rights.result())
   }
 }
