@@ -13,8 +13,8 @@ object Room {
 
   def randomRoom(random: Random): Room = {
     random.nextInt(10) match {
-      case 0 | 1 | 2 => new DilapidatedRoom(random.nextInt(3))
-      case 3 | 4 | 5 => new OrdinaryRoom(random.nextInt(4))
+      case 0 | 1 | 2 => new DilapidatedRoom(random.nextInt(5))
+      case 3 | 4 | 5 => new OrdinaryRoom(random.nextInt(7))
       case 6 => new FountainRoom(random.nextInt(3))
       case 7 => new Larder()
       case 8 => new CratesRoom()
