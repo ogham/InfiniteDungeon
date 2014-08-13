@@ -47,7 +47,7 @@ class Level(rooms: roomMap, directions: Directions, monsters: mutable.Map[Monste
 
     var extraActions: Seq[Action] = List()
     extraActions ++= room.passiveActions()
-    extraActions ++= monstersIn(room).map(new Attack(_))
+    extraActions ++= monstersIn(room).flatMap(_.actions())
     extraActions.zipWithIndex.foreach(m => actions += numToChar(m._2 + 1) -> m._1)
     actions.result()
   }

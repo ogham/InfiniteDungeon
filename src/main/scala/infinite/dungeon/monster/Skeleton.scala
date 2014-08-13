@@ -2,7 +2,7 @@ package infinite.dungeon.monster
 
 import infinite.dungeon.Game
 
-class Skeleton(variant: Int) extends Monster {
+class Skeleton(variant: Int) extends EnemyMonster {
   override def name(): String = "skeleton"
 
   override def describe(uppercase: Boolean): String = {
